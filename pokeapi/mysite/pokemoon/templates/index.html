@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Pokemoon{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Интернет-каталог покемонов Pokemoon</h1>
+    </header>
+
+    <label for="input">Поиск:</label>
+    <input id="input" type="text">
+
+    <p id="test"></p>
+
+    <div class="content">
+        {% if pokemons %}
+            <ol>
+                {% for pokemon in pokemons %}
+                    <li>{{ pokemon.name }}</li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p>No pokemons today :c</p>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>Все права защищены</p>
+    </footer>
+
+    <script>
+        const input = document.getElementById('input');
+
+        input.onkeyup = function () {
+            const filter = input.value.toUpperCase();
+            const list = document.getElementsByTagName('li');
+            for (let i = 0; i < list.length; i++) {
+                const name = list[i].innerHTML;
+                if (name.toUpperCase().indexOf(filter) === 0)
+                    list[i].style.display = 'list-item';
+                else
+                    list[i].style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
