@@ -2,21 +2,24 @@
 <html>
 <head>
     <title>{% block title %}Pokemoon{% endblock %}</title>
+    <style>
+        .page-num{display:inline}
+    </style>
 </head>
 <body>
     <header>
-        <h1>Интернет-каталог покемонов Pokemoon</h1>
+        <h1>Pokemoon: интернет-каталог покемонов</h1>
     </header>
 
-    <label for="input">Поиск:</label>
     <input id="input" type="text">
+    <button id="search">Искать</button>
 
     <p id="test"></p>
 
     <div class="content">
         {% if pokemons %}
             <ol>
-                {% for pokemon in pokemons %}
+                {% for pokemon in page_obj %}
                     <li>{{ pokemon.name }}</li>
                 {% endfor %}
             </ol>
@@ -25,14 +28,34 @@
         {% endif %}
     </div>
 
+    <nav class="list-pages">
+        <ul>
+            {% for p in page_obj.paginator.page_range %}
+                {% if page_obj.number == p %}
+                    <li class="page-num page-num-selected">{{ p }}</li>
+                {% elif p >= page_obj.number|add:-5 and p <= page_obj.number|add:5  %}
+                    <li class="page-num"><a href="?page={{ p }}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+
     <footer>
-        <p>Все права защищены</p>
+        <p>Все права защищены. Покемоны с сайта</p>
     </footer>
 
     <script>
         const input = document.getElementById('input');
+        const button = document.getElementById('search');
 
-        input.onkeyup = function () {
+        var pokemon = {{pokemon}}
+
+        //for (let i = 0; i < pokemon.length; i++) {
+        //    console.log(pokemon[i])
+        //}
+
+        //input.onkeyup = function () {
+        button.onclick = function () {
             const filter = input.value.toUpperCase();
             const list = document.getElementsByTagName('li');
             for (let i = 0; i < list.length; i++) {
