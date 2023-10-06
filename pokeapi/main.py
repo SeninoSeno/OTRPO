@@ -27,14 +27,3 @@ for pokemon in list['results']:
         filetered.append(pokemon)
 
 print(filetered)
-
-
-
-
-
-
-
-# for i in range (requests.get(f'{url}').json()['count']):
-#     pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{i+1}')
-#     print(pokemon.json()['name'])
-

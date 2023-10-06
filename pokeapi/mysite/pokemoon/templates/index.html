@@ -41,7 +41,7 @@
     </nav>
 
     <footer>
-        <p>Все права защищены. Покемоны с сайта</p>
+        <p>Все права защищены. Покемоны с сайта <a href="https://pokeapi.co/">pokeapi.co</a></p>
     </footer>
 
     <script>
@@ -49,9 +49,7 @@
         const button = document.getElementById('search');
 
         button.onclick = function () {
-            console.log('Тык');
             const filter = input.value.toLowerCase();
-
             window.location.href = "?q=" + filter;
         }
     </script>
