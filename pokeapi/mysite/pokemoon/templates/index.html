@@ -34,7 +34,7 @@
                 {% if page_obj.number == p %}
                     <li class="page-num page-num-selected">{{ p }}</li>
                 {% elif p >= page_obj.number|add:-5 and p <= page_obj.number|add:5  %}
-                    <li class="page-num"><a href="?page={{ p }}">{{ p }}</a></li>
+                    <li class="page-num"><a href="?q={{q}}&page={{p}}">{{ p }}</a></li>
                 {% endif %}
             {% endfor %}
         </ul>
@@ -48,23 +48,11 @@
         const input = document.getElementById('input');
         const button = document.getElementById('search');
 
-        var pokemon = {{pokemon}}
-
-        //for (let i = 0; i < pokemon.length; i++) {
-        //    console.log(pokemon[i])
-        //}
-
-        //input.onkeyup = function () {
         button.onclick = function () {
-            const filter = input.value.toUpperCase();
-            const list = document.getElementsByTagName('li');
-            for (let i = 0; i < list.length; i++) {
-                const name = list[i].innerHTML;
-                if (name.toUpperCase().indexOf(filter) === 0)
-                    list[i].style.display = 'list-item';
-                else
-                    list[i].style.display = 'none';
-            }
+            console.log('Тык');
+            const filter = input.value.toLowerCase();
+
+            window.location.href = "?q=" + filter;
         }
     </script>
 </body>

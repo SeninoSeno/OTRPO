@@ -1,6 +1,9 @@
 from django.core.paginator import Paginator
 import requests
 
+
+# I test something here
+
 url = "https://pokeapi.co/api/v2/pokemon"
 count = requests.get(f'{url}').json()['count']
 print(count)
@@ -10,10 +13,21 @@ print(count)
 
 list = requests.get(f'{url}?limit={count}&offset=0').json()
 
-print(list['results'])
+q = "sun"
+test = "sunshine"
 
-p = Paginator(list['results'], 10)
-print(p.num_pages)
+print(test.__contains__(q))
+
+filetered = []
+
+print(list['results'])
+print(list['results'][0]['name'])
+for pokemon in list['results']:
+    if pokemon['name'].__contains__(q):
+        filetered.append(pokemon)
+
+print(filetered)
+
 
 
 
