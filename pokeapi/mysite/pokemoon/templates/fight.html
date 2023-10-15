@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ pc.name }} VS {{ user.name }}</title>
+</head>
+<body>
+    <div style="display: flex;">
+        <div>
+            <p>{{ user.name }}</p>
+            <img src="{{ user.sprites.front_default }}">
+            <p>Рост: {{ user.height }}</p>
+            <p>Вес: {{ user.weight }}</p>
+            <p id="hp_player">Здоровье: {{ user_hp }}</p>
+            <p>Атака: {{ user_attack }}</p>
+        </div>
+        <div style="margin-left: 1.25rem;">
+            <p>{{ pc.name }}</p>
+            <img src="{{ pc.sprites.front_default }}">
+            <p>Рост: {{ pc.height }}</p>
+            <p>Вес: {{ pc.weight }}</p>
+            <p id="hp_pc">Здоровье: {{ pc_hp }}</p>
+            <p>Атака: {{ pc_attack }}</p>
+        </div>
+    </div>
+
+    <label for="user_throw">Бросок:</label>
+    <input type="number" id="user_throw" max="10" min="1">
+    <br>
+    <br>
+    <button onclick="fight()">Сделать ход</button>
+    <button onclick="autoFightRound()">Быстрый бой</button>
+</body>
+</html>
