@@ -11,7 +11,7 @@
             <img src="{{ user.sprites.front_default }}">
             <p>Рост: {{ user.height }}</p>
             <p>Вес: {{ user.weight }}</p>
-            <p id="hp_player">Здоровье: {{ user_hp }}</p>
+            <p id="user_hp">HP: {{ user_hp }}</p>
             <p>Атака: {{ user_attack }}</p>
         </div>
         <div style="margin-left: 1.25rem;">
@@ -19,16 +19,51 @@
             <img src="{{ pc.sprites.front_default }}">
             <p>Рост: {{ pc.height }}</p>
             <p>Вес: {{ pc.weight }}</p>
-            <p id="hp_pc">Здоровье: {{ pc_hp }}</p>
+            <p id="pc_hp">HP: {{ pc_hp }}</p>
             <p>Атака: {{ pc_attack }}</p>
         </div>
     </div>
 
-    <label for="user_throw">Бросок:</label>
-    <input type="number" id="user_throw" max="10" min="1">
+    <label for="throw_input">Бросок:</label>
+    <input type="number" id="throw_input" max="10" min="1">
     <br>
     <br>
     <button onclick="fight()">Сделать ход</button>
     <button onclick="autoFightRound()">Быстрый бой</button>
+
+    <script>
+        let user_hp = {{ user_hp }};
+        let pc_hp = {{ pc_hp }};
+        var throw_input = document.getElementById('throw_input');
+        throw_input.value = Math.floor(Math.random() * 10) + 1;
+
+        function fight() {
+            let pc_throw = Math.floor(Math.random() * 10) + 1;
+            let user_throw = throw_input.value;
+
+            if (pc_throw % 2 === user_throw % 2) {
+                pc_hp -= {{ user_attack }};
+                if (pc_hp <= 0) {
+                    alert('Вы победили!');
+                    window.location.reload();
+                }
+                else {
+                    document.getElementById('pc_hp').innerHTML = 'HP: ' + pc_hp;
+                    document.getElementById('pc_hp').style.color = 'red';
+                }
+            }
+            else {
+                user_hp -= {{ pc_attack }};
+                if (user_hp <= 0) {
+                    alert('Вы проиграли :c');
+                    window.location.reload();
+                }
+                else {
+                    document.getElementById('user_hp').innerHTML = 'HP: ' + user_hp;
+                    document.getElementById('user_hp').style.color = 'red';
+                }
+            }
+        }
+    </script>
 </body>
 </html>
