@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ pokemon.name }} - информация</title>
+</head>
+<body>
+    <header>
+        <h1><a href=".">Pokemoon</a>/<a href="./{{ pokemon.name }}">{{ pokemon.name }}</a></h1>
+    </header>
+    <img src="{{ pokemon.sprites.front_default }}" style="position:absolute; top:50px; right:50px;">
+    <p>Рост: {{ pokemon.height }}</p>
+    <p>Вес: {{ pokemon.weight }}</p>
+    <p>HP: {{ hp }}</p>
+    <p>Атака: {{ attack }}</p>
+
+    <a href="">
+        <button>Бой!</button>
+    </a>
+
+</body>
+</html>

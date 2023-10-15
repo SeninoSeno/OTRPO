@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>Pokemoon: интернет-каталог покемонов</h1>
+        <h1><a href=".">Pokemoon</a>: интернет-каталог покемонов</h1>
     </header>
 
     <input id="input" type="text">
@@ -20,7 +20,19 @@
         {% if pokemons %}
             <ol>
                 {% for pokemon in page_obj %}
-                    <li>{{ pokemon.name }}</li>
+                    <li>
+                        <div>
+                        <a href="/{{ pokemon.name }}">
+                            {{ pokemon.name }}
+                            <img src="{{ pokemon.info.sprites.front_default }}">
+                        </a>
+                        <p>Рост: {{ pokemon.info.height }}</p>
+                        <p>Вес: {{ pokemon.info.weight }}</p>
+                        <a href="">
+                            <button>Бой!</button>
+                        </a>
+                    </div>
+                    </li>
                 {% endfor %}
             </ol>
         {% else %}
@@ -41,12 +53,12 @@
     </nav>
 
     <footer>
-        <p>Все права защищены. Покемоны с сайта <a href="https://pokeapi.co/">pokeapi.co</a></p>
+        <p>Все права зачищены. Покемоны с сайта <a href="https://pokeapi.co/" target="_blank">pokeapi.co</a></p>
     </footer>
 
     <script>
-        const input = document.getElementById('input');
-        const button = document.getElementById('search');
+        var input = document.getElementById('input');
+        var button = document.getElementById('search');
 
         button.onclick = function () {
             const filter = input.value.toLowerCase();
