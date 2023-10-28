@@ -1,8 +1,13 @@
-import random
-
 from django.shortcuts import render
-import requests
 from django.core.paginator import Paginator
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
+
+import requests
+import random
+import json
+
+from .models import Fight
 
 
 url = "https://pokeapi.co/api/v2/pokemon"
@@ -60,6 +65,20 @@ def fight(request, name):
         "user_attack": user_info['stats'][1]['base_stat'],
     }
     return render(request, "fight.html", context)
+
+def result(request, name):
+    data = json.loads(request.body.decode("utf-8"))
+
+    fight = Fight()
+    fight.first_pokemon_id = data['user_id']
+    fight.first_pokemon_hp = data['user_hp']
+    fight.second_pokemon_id = data['pc_id']
+    fight.second_pokemon_hp = data['pc_hp']
+    fight.round_count = data['round_count']
+    fight.winner_id = data['winner_id']
+    fight.save()
+
+    return HttpResponse("Fight saved")
 
 def get_some_info(name):
     return requests

@@ -7,7 +7,7 @@
 <body>
     <div style="display: flex;">
         <div>
-            <p>{{ user.name }}</p>
+            <p><a href="/{{ user.name }}">{{ user.name }}</a></p>
             <img src="{{ user.sprites.front_default }}">
             <p>Рост: {{ user.height }}</p>
             <p>Вес: {{ user.weight }}</p>
@@ -15,7 +15,7 @@
             <p>Атака: {{ user_attack }}</p>
         </div>
         <div style="margin-left: 1.25rem;">
-            <p>{{ pc.name }}</p>
+            <p><a href="/{{ pc.name }}">{{ pc.name }}</a></p>
             <img src="{{ pc.sprites.front_default }}">
             <p>Рост: {{ pc.height }}</p>
             <p>Вес: {{ pc.weight }}</p>
@@ -29,13 +29,13 @@
     <br>
     <br>
     <button onclick="fight()">Сделать ход</button>
-    <button onclick="autoFightRound()">Быстрый бой</button>
+    <button onclick="autoFight()">Быстрый бой</button>
 
     <script>
+        document.getElementById('throw_input').value = Math.floor(Math.random() * 10) + 1;
+
         let user_hp = {{ user_hp }};
         let pc_hp = {{ pc_hp }};
-        var throw_input = document.getElementById('throw_input');
-        throw_input.value = Math.floor(Math.random() * 10) + 1;
 
         function fight() {
             let pc_throw = Math.floor(Math.random() * 10) + 1;
@@ -63,6 +63,51 @@
                     document.getElementById('user_hp').style.color = 'red';
                 }
             }
+        }
+
+        function autoFight() {
+            let round_count = 1;
+
+            while (pc_hp > 0 && user_hp > 0) {
+                let pc_throw = Math.floor(Math.random() * 10) + 1;
+                let user_throw = Math.floor(Math.random() * 10) + 1;
+
+                if (pc_throw % 2 === user_throw % 2){
+                    pc_hp -= {{ user_attack }};
+                    if (pc_hp <= 0) {
+                        alert('Вы победили!');
+                        saveResult(round_count, {{ user.id }});
+                    }
+                }
+                else {
+                    user_hp -= {{ pc_attack }};
+                    if (user_hp <= 0) {
+                        alert('Вы проиграли!');
+                        saveResult(round_count, {{ pc.id }});
+                    }
+                }
+                round_count += 1;
+            }
+        }
+
+        function saveResult(round_count, winner_id) {
+            const data = {
+                'user_id': {{ user.id }},
+                'user_hp': user_hp,
+                'pc_id': {{ pc.id }},
+                'pc_hp': pc_hp,
+                'round_count': round_count,
+                'winner_id': winner_id,
+            };
+
+            fetch("/{{ user.name }}/fight/result", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify(data)
+            });
         }
     </script>
 </body>
