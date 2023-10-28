@@ -2,10 +2,12 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
+from django.core.mail import send_mail
 
 import requests
 import random
 import json
+import os
 
 from .models import Fight
 
@@ -78,10 +80,27 @@ def result(request, name):
     fight.winner_id = data['winner_id']
     fight.save()
 
+    if (data['send_on_mail']):
+        message_text = f"Развернулась однажды битва меж {get_name(data['user_id'])} (Вы) да {get_name(data['pc_id'])}. " \
+               f"Долгая была битва... Ажна в {data['round_count']} день/дня и {data['round_count']} ночь/ночи билися!" \
+               f"\nЕжели исход не помните - освежу память вашу:"
+        if (data['user_id'] == data['winner_id']):
+            message_text += f"\nПобедили Вы! Побили ворожину аж до {data['pc_hp']} очков здоровия, сам оставшись при {data['user_hp']}. Эво как!"
+        else:
+            message_text += f"\nВы проигарли ту битву... Вы рассыпались в прах при {data['user_hp']} очках здоровия. А у ворога вашего {data['pc_hp']} осталося"
+
+        send_mail(
+            'Информация о битве',
+            message_text,
+            os.environ['EMAIL_HOST_USER'],
+            [data['email']],
+            fail_silently=False,
+        )
+
     return HttpResponse("Fight saved")
 
-def get_some_info(name):
-    return requests
+def get_name(id):
+    return requests.get(f"{url}/{id}").json()['name']
 
 def get_all_info(name):
     return requests.get(f"{url}/{name}").json()

@@ -28,14 +28,21 @@
     <input type="number" id="throw_input" max="10" min="1">
     <br>
     <br>
-    <button onclick="fight()">Сделать ход</button>
-    <button onclick="autoFight()">Быстрый бой</button>
+    <label for="email">E-mail:</label>
+    <input id="email" name="email" type="text" placeholder="seno@moad.dev">
+    <input type="checkbox" id="send_on_mail">
+    <label for="send_on_mail">Да?</label>
+    <br>
+    <br>
+    <button id="fight" onclick="fight()">Сделать ход</button>
+    <button id="auto_fight" onclick="autoFight()">Быстрый бой</button>
 
     <script>
         document.getElementById('throw_input').value = Math.floor(Math.random() * 10) + 1;
 
         let user_hp = {{ user_hp }};
         let pc_hp = {{ pc_hp }};
+        let round_count = 1;
 
         function fight() {
             let pc_throw = Math.floor(Math.random() * 10) + 1;
@@ -45,7 +52,7 @@
                 pc_hp -= {{ user_attack }};
                 if (pc_hp <= 0) {
                     alert('Вы победили!');
-                    window.location.reload();
+                    saveResult(round_count, {{ user.id }});
                 }
                 else {
                     document.getElementById('pc_hp').innerHTML = 'HP: ' + pc_hp;
@@ -56,13 +63,14 @@
                 user_hp -= {{ pc_attack }};
                 if (user_hp <= 0) {
                     alert('Вы проиграли :c');
-                    window.location.reload();
+                    saveResult(round_count, {{ pc.id }});
                 }
                 else {
                     document.getElementById('user_hp').innerHTML = 'HP: ' + user_hp;
                     document.getElementById('user_hp').style.color = 'red';
                 }
             }
+            round_count += 1;
         }
 
         function autoFight() {
@@ -98,6 +106,8 @@
                 'pc_hp': pc_hp,
                 'round_count': round_count,
                 'winner_id': winner_id,
+                'send_on_mail': document.getElementById('send_on_mail').checked,
+                'email': document.getElementById('email').value,
             };
 
             fetch("/{{ user.name }}/fight/result", {
@@ -108,6 +118,9 @@
                 },
                 body: JSON.stringify(data)
             });
+
+            document.getElementById('fight').disabled = true;
+            document.getElementById('auto_fight').disabled = true;
         }
     </script>
 </body>
