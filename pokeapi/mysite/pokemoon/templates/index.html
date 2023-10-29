@@ -22,7 +22,7 @@
                 {% for pokemon in page_obj %}
                     <li>
                         <div>
-                        <a href="/{{ pokemon.name }}">
+                        <a href="/{{ pokemon.name }}/info">
                             {{ pokemon.name }}
                             <img src="{{ pokemon.info.sprites.front_default }}">
                         </a>

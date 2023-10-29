@@ -7,7 +7,7 @@
 <body>
     <div style="display: flex;">
         <div>
-            <p><a href="/{{ user.name }}">{{ user.name }}</a></p>
+            <p><a href="/{{ user.name }}/info">{{ user.name }}</a></p>
             <img src="{{ user.sprites.front_default }}">
             <p>Рост: {{ user.height }}</p>
             <p>Вес: {{ user.weight }}</p>
@@ -15,7 +15,7 @@
             <p>Атака: {{ user_attack }}</p>
         </div>
         <div style="margin-left: 1.25rem;">
-            <p><a href="/{{ pc.name }}">{{ pc.name }}</a></p>
+            <p><a href="/{{ pc.name }}/info">{{ pc.name }}</a></p>
             <img src="{{ pc.sprites.front_default }}">
             <p>Рост: {{ pc.height }}</p>
             <p>Вес: {{ pc.weight }}</p>

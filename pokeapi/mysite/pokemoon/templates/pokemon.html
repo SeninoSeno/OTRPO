@@ -6,9 +6,11 @@
 </head>
 <body>
     <header>
-        <h1><a href=".">Pokemoon</a>/<a href="/{{ pokemon.name }}">{{ pokemon.name }}</a></h1>
+        <h1><a href=".">Pokemoon</a>/<a href="/{{ pokemon.name }}/info">{{ pokemon.name }}</a></h1>
     </header>
     <img src="{{ pokemon.sprites.front_default }}" style="position:absolute; top:50px; right:50px;">
+
+    <p>ID: {{ pokemon.id }}</p>
     <p>Рост: {{ pokemon.height }}</p>
     <p>Вес: {{ pokemon.weight }}</p>
     <p>HP: {{ hp }}</p>

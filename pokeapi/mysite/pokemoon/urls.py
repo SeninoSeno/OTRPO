@@ -3,7 +3,14 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('<str:name>', views.pokemon, name='pokemon'),
+    path('<str:name>/info', views.pokemon, name='pokemon'),
     path('<str:name>/fight', views.fight, name='fight'),
     path("<str:name>/fight/result", views.result, name="result"),
+    # API ↓
+    path("pokemon/list", views.PokemonList.as_view()),
+    path("pokemon/<int:id>", views.PokemonInfo.as_view()),
+    path("pokemon/random", views.RandomPokemon.as_view()),
+    path("fight", views.PokemonFight.as_view()),
+    path("fight/fast", views.PokemonAutoFight.as_view()),
+    path("fight/auto", views.PokemonAutoFight.as_view()),
 ]
