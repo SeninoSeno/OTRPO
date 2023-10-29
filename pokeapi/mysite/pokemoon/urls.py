@@ -8,6 +8,7 @@ urlpatterns = [
     path("<str:name>/fight/result", views.result, name='result'),
     path("<str:name>/save", views.save_to_ftp, name='save'),
     path("<str:name>/ftp", views.save_to_ftp, name='save'),
+    path("<str:name>/feedback", views.feedback, name='feedback'),
     # API ↓
     path("pokemon/list", views.PokemonList.as_view()),
     path("pokemon/<int:id>", views.PokemonInfo.as_view()),

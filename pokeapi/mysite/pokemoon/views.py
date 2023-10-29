@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt,csrf_protect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.utils import timezone
 
@@ -15,7 +14,7 @@ import json
 import os
 from ftplib import FTP
 
-from .models import Fight
+from .models import Fight, Pokemon, Feedback
 
 
 url = "https://pokeapi.co/api/v2/pokemon"
@@ -51,6 +50,11 @@ def index(request):
 
 def pokemon(request, name):
     info = get_all_info(name)
+    pokemon = Pokemon.objects.get(name=name)
+    print(Feedback.objects.filter(pokemon=pokemon))
+    for feedback in Feedback.objects.filter(pokemon=name):
+        print(feedback)
+
     context = {
         "pokemon": info,
         "hp": info['stats'][0]['base_stat'],
@@ -138,6 +142,25 @@ def save_to_ftp(request, name):
         except Exception as e:
             return HttpResponse(f"Error: {e}")
         return HttpResponse("File saved on ftp-server")
+
+def feedback(request, name):
+    if request.method == 'POST':
+        rating = request.POST.dict()['rating']
+        text = request.POST.dict()['feedback']
+
+        if not(Pokemon.objects.filter(name=name).exists()):
+            pokemon = Pokemon()
+            pokemon.pokid = get_some_info(name)['id']
+            pokemon.name = name
+            pokemon.save()
+        pokemon = Pokemon.objects.get(name=name)
+
+        feedback = Feedback()
+        feedback.rating = rating
+        feedback.text = text
+        feedback.pokemon = pokemon
+        feedback.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def get_name(id):

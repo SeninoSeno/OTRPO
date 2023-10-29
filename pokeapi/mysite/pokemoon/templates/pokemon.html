@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{{ pokemon.name }} - информация</title>
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}" type="text/css">
 </head>
 <body>
     <header>
@@ -20,22 +22,52 @@
         <button>Бой!</button>
     </a>
 
-    <h3>Сохранить покемона</h3>
-    <form method="post" action="{%  url 'save' pokemon.name %}">
-        {% csrf_token %}
-        <div>
-            <label for="server">Название сервера:</label>
-            <input type="text" id="server" name="server" placeholder="localhost">
-        </div>
-        <div style="margin-top: 8px">
-            <label for="login">Логин:</label>
-            <input type="text" id="login" name="login" placeholder="aboba">
-        </div>
-        <div style="margin-top: 8px">
-            <label for="password">Пароль:</label>
-            <input type="password" id="password" name="password" placeholder="qwerty">
-        </div>
-        <button type="submit" style="margin-top: 8px">Сохранить</button>
-    </form>
+    <div class="save_to_ftp">
+        <h3>Сохранить покемона</h3>
+        <form method="post" action="{%  url 'save' pokemon.name %}">
+            {% csrf_token %}
+            <div>
+                <label for="server">Название сервера:</label>
+                <input type="text" id="server" name="server" placeholder="localhost">
+            </div>
+            <div style="margin-top: 8px">
+                <label for="login">Логин:</label>
+                <input type="text" id="login" name="login" placeholder="aboba">
+            </div>
+            <div style="margin-top: 8px">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" placeholder="qwerty">
+            </div>
+            <button type="submit" style="margin-top: 8px">Сохранить</button>
+        </form>
+    </div>
+
+    <div class="feedback_form">
+        <h3>Отзывы и оценки</h3>
+        <form method="post" action="{% url 'feedback' pokemon.name %}">
+            {% csrf_token %}
+            <div class="rating-area">
+                <input type="radio" id="star-5" name="rating" value="5">
+                <label for="star-5" title="Оценка «5»"></label>
+                <input type="radio" id="star-4" name="rating" value="4">
+                <label for="star-4" title="Оценка «4»"></label>
+                <input type="radio" id="star-3" name="rating" value="3">
+                <label for="star-3" title="Оценка «3»"></label>
+                <input type="radio" id="star-2" name="rating" value="2">
+                <label for="star-2" title="Оценка «2»"></label>
+                <input type="radio" id="star-1" name="rating" value="1" checked="checked">
+                <label for="star-1" title="Оценка «1»"></label>
+            </div>
+            <div style="margin-top: 8px">
+                <label for="feedback">Отзыв:</label>
+                <textarea id="feedback" name="feedback" cols="40" rows="5"></textarea>
+            </div>
+            <button type="submit" style="margin-top: 8px">Отправить</button>
+        </form>
+    </div>
+
+    <div class="feedbacks">
+
+    </div>
 </body>
 </html>
