@@ -91,7 +91,7 @@ def result(request, name):
         if (data['user_id'] == data['winner_id']):
             message_text += f"\nПобедили Вы! Побили ворожину аж до {data['pc_hp']} очков здоровия, сам оставшись при {data['user_hp']}. Эво как!"
         else:
-            message_text += f"\nВы проигарли ту битву... Вы рассыпались в прах при {data['user_hp']} очках здоровия. А у ворога вашего {data['pc_hp']} осталося"
+            message_text += f"\nВы проигарли ту битву... Вы рассыпались в прах при {data['user_hp']} очках здоровия. А у ворога вашего {data['pc_hp']} очков осталося"
 
         send_mail(
             'Информация о битве',
