@@ -50,15 +50,20 @@ def index(request):
 
 def pokemon(request, name):
     info = get_all_info(name)
+
+    feedbacks = []
     pokemon = Pokemon.objects.get(name=name)
-    print(Feedback.objects.filter(pokemon=pokemon))
-    for feedback in Feedback.objects.filter(pokemon=name):
-        print(feedback)
+    for feedback in Feedback.objects.filter(pokemon=pokemon):
+        feedbacks.append({
+            'text': feedback.text,
+            'rating': feedback.rating,
+        })
 
     context = {
-        "pokemon": info,
-        "hp": info['stats'][0]['base_stat'],
-        "attack": info['stats'][1]['base_stat'],
+        'pokemon': info,
+        'hp': info['stats'][0]['base_stat'],
+        'attack': info['stats'][1]['base_stat'],
+        'feedbacks': feedbacks,
     }
     return render(request, "pokemon.html", context)
 

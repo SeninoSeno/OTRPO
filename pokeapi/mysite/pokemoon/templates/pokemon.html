@@ -42,8 +42,8 @@
         </form>
     </div>
 
+    <h3>Отзывы и оценки</h3>
     <div class="feedback_form">
-        <h3>Отзывы и оценки</h3>
         <form method="post" action="{% url 'feedback' pokemon.name %}">
             {% csrf_token %}
             <div class="rating-area">
@@ -67,6 +67,19 @@
     </div>
 
     <div class="feedbacks">
+
+        {% if feedbacks %}
+            {% for feedback in feedbacks %}
+                <div class="feedback">
+                    <p>Рейтинг: {{ feedback.rating }}</p>
+                    {% if feedback.text %}
+                        <p>Текст: {{ feedback.text }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No feedbacks today :c</p>
+        {% endif %}
 
     </div>
 </body>
