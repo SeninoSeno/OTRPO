@@ -20,5 +20,22 @@
         <button>Бой!</button>
     </a>
 
+    <h3>Сохранить покемона</h3>
+    <form method="post" action="{%  url 'save' pokemon.name %}">
+        {% csrf_token %}
+        <div>
+            <label for="server">Название сервера:</label>
+            <input type="text" id="server" name="server" placeholder="localhost">
+        </div>
+        <div style="margin-top: 8px">
+            <label for="login">Логин:</label>
+            <input type="text" id="login" name="login" placeholder="aboba">
+        </div>
+        <div style="margin-top: 8px">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" placeholder="qwerty">
+        </div>
+        <button type="submit" style="margin-top: 8px">Сохранить</button>
+    </form>
 </body>
 </html>

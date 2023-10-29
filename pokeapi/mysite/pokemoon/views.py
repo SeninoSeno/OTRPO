@@ -3,6 +3,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.core.mail import send_mail
+from django.utils import timezone
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,6 +13,7 @@ import requests
 import random
 import json
 import os
+from ftplib import FTP
 
 from .models import Fight
 
@@ -103,6 +105,40 @@ def result(request, name):
 
     return HttpResponse("Fight saved")
 
+def save_to_ftp(request, name):
+    if request.method == 'POST':
+        pokemon = get_some_info(name)
+        data = request.POST.dict()
+        md = f"# [{name}](https://pokeapi.co/api/v2/pokemon/{name})\n"
+        md += "### Info\n"
+        md += f"* id: {pokemon['id']}\n"
+        md += f"* height: {pokemon['height']}\n"
+        md += f"* weight: {pokemon['weight']}\n"
+        md += f"* hp: {pokemon['height']}\n"
+        md += f"* attack: {pokemon['height']}\n"
+        md += "### Image\n"
+        md += f"[poke]({pokemon['image']} \"Image of {name}\")"
+
+        try:
+            ftp = FTP(data['server'])
+            ftp.login(data['login'], data['password'])
+            folder = f"{timezone.now().strftime('%Y%m%d')}"
+            if not(folder in ftp.nlst()):
+                ftp.mkd(folder)
+            ftp.cwd(folder)
+            if not(f"{name}.md" in ftp.nlst()):
+                with open(f"{name}.md", "w") as file:
+                    file.write(md)
+                ftp.storbinary(f"STOR {name}.md", open(f"{name}.md", "rb"))
+                os.remove(f"{name}.md")
+            else:
+                return HttpResponse("File already on ftp-server")
+            ftp.quit()
+            ftp.close()
+        except Exception as e:
+            return HttpResponse(f"Error: {e}")
+        return HttpResponse("File saved on ftp-server")
+
 
 def get_name(id):
     return requests.get(f"{url}/{id}").json()['name']
@@ -124,6 +160,7 @@ def get_some_info(id):
         "hp": info['stats'][0]['base_stat'],
         "attack": info['stats'][1]['base_stat'],
     }
+
 
 class RandomPokemon(APIView):
     def get(self, request):
