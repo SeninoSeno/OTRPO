@@ -3,6 +3,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.utils import timezone
+from django.views.decorators.cache import cache_page
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,6 +24,7 @@ pokemon_count = requests.get(f'{url}').json()['count']
 pokemons = requests.get(f'{url}?limit={pokemon_count}&offset=0').json()['results']
 
 
+@cache_page(60 * 60)
 def index(request):
     q = request.GET.get('q')
     page = request.GET.get('page')
@@ -48,11 +50,18 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+@cache_page(60 * 60)
 def pokemon(request, name):
     info = get_all_info(name)
 
-    feedbacks = []
+    if not(Pokemon.objects.filter(name=name).exists()):
+        pokemon = Pokemon()
+        pokemon.pokid = get_some_info(name)['id']
+        pokemon.name = name
+        pokemon.save()
     pokemon = Pokemon.objects.get(name=name)
+
+    feedbacks = []
     for feedback in Feedback.objects.filter(pokemon=pokemon):
         feedbacks.append({
             'text': feedback.text,
