@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -50,9 +51,9 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
-@cache_page(60 * 60)
 def pokemon(request, name):
     info = get_all_info(name)
+    print()
 
     if not(Pokemon.objects.filter(name=name).exists()):
         pokemon = Pokemon()
@@ -174,11 +175,12 @@ def feedback(request, name):
         feedback.text = text
         feedback.pokemon = pokemon
         feedback.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponseRedirect(f"/{name}/info")
 
 
 def get_name(id):
     return requests.get(f"{url}/{id}").json()['name']
+
 def get_all_info(name):
     return requests.get(f"{url}/{name}").json()
 def get_random_pokemon_id():

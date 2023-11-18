@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}" type="text/css">
 </head>
 <body>
+    {% load cache %}
+    {% cache 600 pokemon pokemon.name %}
     <header>
         <h1><a href="..">Pokemoon</a>/<a href="/{{ pokemon.name }}/info">{{ pokemon.name }}</a></h1>
     </header>
@@ -41,6 +43,8 @@
             <button type="submit" style="margin-top: 8px">Сохранить</button>
         </form>
     </div>
+
+    {% endcache %}
 
     <h3>Отзывы и оценки</h3>
     <div class="feedback_form">
