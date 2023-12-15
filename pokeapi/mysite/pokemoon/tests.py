@@ -28,7 +28,7 @@ class PokemonsViewTest(TestCase):
         response = self.client.post(reverse('result', args=[1]),
                                             data='{"user_id": 1, "pc_id": 2, '
                                                  '"user_hp": 111, "pc_hp": 222, '
-                                                 '"round_count": 99, "winner_id": 1, "email": "aaa"}',
+                                                 '"round_count": 99, "winner_id": 1, "email": ""}',
                                     content_type="application/json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(Fight.objects.all()), 1)
