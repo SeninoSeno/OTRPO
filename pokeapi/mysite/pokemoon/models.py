@@ -11,13 +11,13 @@ class Fight(models.Model):
 
 class Pokemon(models.Model):
     pokid = models.IntegerField()
-    name = models.CharField()
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
 class Feedback(models.Model):
-    rating = models.PositiveSmallIntegerField()
+    rating = models.IntegerField()
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 

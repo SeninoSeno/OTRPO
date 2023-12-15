@@ -105,7 +105,7 @@ def result(request, name):
     fight.winner_id = data['winner_id']
     fight.save()
 
-    if (data['send_on_mail']):
+    if (data['email']):
         message_text = f"Развернулась однажды битва меж {get_name(data['user_id'])} (Вы) да {get_name(data['pc_id'])}. " \
                f"Долгая была битва... Ажна в {data['round_count']} день/дня и {data['round_count']} ночь/ночи билися!" \
                f"\nЕжели исход не помните - освежу память вашу:"
