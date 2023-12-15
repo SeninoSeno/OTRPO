@@ -5,6 +5,7 @@
 
 .env*
 !.env.example
+temp
 
 # User-specific files
 **/*.rsuser
