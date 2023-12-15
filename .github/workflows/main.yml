@@ -11,7 +11,7 @@ env:
 
 jobs:
   docker:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
           tags: ${{ env.TEST_TAG }}
       - name: Test
         run: |
-          docker run --rm ${{ env.TEST_TAG }} python manage.py test pokemoon.tests.PokemonsViewTest
+          docker run --rm ${{ env.TEST_TAG }} python manage.py test pokemoon.tests.PokemonsViewTest -v 2
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
