@@ -34,10 +34,21 @@ services:
       - redis-data:/data
     networks:
       - redis-conn
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - db-conn
 
 volumes:
   db-data:
   redis-data:
+  grafana-data:
 
 networks:
   db-conn:
