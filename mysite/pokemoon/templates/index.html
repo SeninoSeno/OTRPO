@@ -9,6 +9,19 @@
 <body>
     <header>
         <h1><a href=".">Pokemoon</a>: интернет-каталог покемонов</h1>
+
+        {% if not user.is_authenticated %}
+            <a href="{% url 'login' %}">
+                <button>Войти</button>
+            </a>
+        {% else %}
+            <p>{{ user.username }}</p>
+            <a href="{% url 'logout' %}">
+                <button>Выйти</button>
+            </a>
+        {% endif %}
+
+        <p>Hi hello</p>
     </header>
 
     <input id="input" type="text">

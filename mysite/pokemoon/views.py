@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
-from django.core.cache import cache
+from django.contrib.auth import logout, authenticate, login
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,7 +17,8 @@ import os
 from ftplib import FTP
 
 from .models import Fight, Pokemon, Feedback
-
+from .token import account_activation_token
+from .forms import RegisterForm, LoginForm
 
 url = "https://pokeapi.co/api/v2/pokemon"
 request_res = requests.get(f'{url}').json()
@@ -53,7 +54,6 @@ def index(request):
 
 def pokemon(request, name):
     info = get_all_info(name)
-    print()
 
     if not(Pokemon.objects.filter(name=name).exists()):
         pokemon = Pokemon()
@@ -180,7 +180,6 @@ def feedback(request, name):
 
 def get_name(id):
     return requests.get(f"{url}/{id}").json()['name']
-
 def get_all_info(name):
     return requests.get(f"{url}/{name}").json()
 def get_random_pokemon_id():
@@ -305,3 +304,57 @@ class PokemonAutoFight(APIView):
                          'round': round_count,
                          'user': user_data,
                          'pc': pc_data})
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        token = account_activation_token.make_token(user)
+        mail_subject = 'Одноразовый токен для входа'
+        message = token
+        to_email = user.email
+
+        send_mail(
+            mail_subject,
+            message,
+            os.environ['EMAIL_HOST_USER'],
+            [to_email],
+            fail_silently=False,
+        )
+
+        if user is not None:
+            return render(request, 'registration/login_prove.html',
+                          {'username': username, 'password': password,  'token': token})
+    else:
+        form = LoginForm()
+        return render(request, 'registration/login.html', {'form': form})
+
+def login_prove_view(request):
+    if request.method == 'POST':
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        input_token = request.POST["input_token"]
+        token = request.POST["token"]
+        if token == input_token:
+            login(request, user)
+            return redirect('index')
+        else:
+            return HttpResponse("Error: wrong token!")
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')
+
+def registration_view(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("User successfully created!")
+        return HttpResponse("Error: user not created!")
+    else:
+        form = RegisterForm()
+        return render(request, 'registration/registration.html', {'form': form})

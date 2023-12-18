@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Second factor</title>
+</head>
+<body>
+    <h1>Отправлен код на почту, введите его, чтобы войти</h1>
+    <form method="post" action="{% url 'login_prove' %}">
+        {% csrf_token %}
+        <input type="text" name="input_token">
+        <input type="hidden" name="username" value="{{ username }}">
+        <input type="hidden" name="password" value="{{ password }}">
+        <input type="hidden" name="token" value="{{ token }}">
+        <input type="submit" value="Войти">
+    </form>
+</body>
+</html>
