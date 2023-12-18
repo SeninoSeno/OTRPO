@@ -29,6 +29,9 @@
             <td>{{ form.password }}</td>
         </tr>
     </table>
+    <a href="{% url "social:begin" "vk-oauth2" %}">
+        Login by VK
+    </a>
 
     <input type="submit" value="Войти">
     <a href="{% url 'register' %}">

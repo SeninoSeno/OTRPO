@@ -75,6 +75,9 @@
         {% if feedbacks %}
             {% for feedback in feedbacks %}
                 <div class="feedback">
+                    {% if feedback.user %}
+                        <p>Автор: {{ feedback.user }}</p>
+                    {% endif %}
                     <p>Рейтинг: {{ feedback.rating }}</p>
                     {% if feedback.text %}
                         <p>Текст: {{ feedback.text }}</p>

@@ -41,7 +41,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pokemoon',
     'rest_framework',
+    'social_django',
 ]
+
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = os.environ.get("VK_APP_ID")
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.environ.get("VK_API_SECRET")
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
@@ -71,6 +83,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
             ],
         },
     },

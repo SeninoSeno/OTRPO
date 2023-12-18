@@ -67,6 +67,7 @@ def pokemon(request, name):
         feedbacks.append({
             'text': feedback.text,
             'rating': feedback.rating,
+            'user': feedback.user,
         })
 
     context = {
@@ -103,6 +104,8 @@ def result(request, name):
     fight.second_pokemon_hp = data['pc_hp']
     fight.round_count = data['round_count']
     fight.winner_id = data['winner_id']
+    if request.user.id:
+        fight.user = request.user
     fight.save()
 
     if (data['email']):
@@ -174,6 +177,8 @@ def feedback(request, name):
         feedback.rating = rating
         feedback.text = text
         feedback.pokemon = pokemon
+        if request.user.id:
+            feedback.user = request.user
         feedback.save()
     return HttpResponseRedirect(f"/{name}/info")
 

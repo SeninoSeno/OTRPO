@@ -8,6 +8,7 @@ class Fight(models.Model):
     winner_id = models.IntegerField()
     round_count = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True)
 
 class Pokemon(models.Model):
     pokid = models.IntegerField()
@@ -20,7 +21,7 @@ class Feedback(models.Model):
     rating = models.IntegerField()
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True)
     pokemon = models.ForeignKey("Pokemon", on_delete=models.CASCADE)
 
     def __str__(self):

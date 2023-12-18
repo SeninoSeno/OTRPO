@@ -8,3 +8,4 @@ djangorestframework
 selenium
 six
 argon2-cffi
+social-auth-app-django
